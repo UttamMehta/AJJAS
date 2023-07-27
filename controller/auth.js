@@ -3,14 +3,13 @@ const jwt = require("jsonwebtoken");
 const config = require("../config/config");
 
 function generateToken(user) {
-  const { _id, name, email, image } = user;
+  const { _id, name, email } = user;
 
   return jwt.sign(
     {
       _id,
       name,
       email,
-      image,
     },
     config.JWT_SECRET_KEY
   );

@@ -18,6 +18,7 @@ const connectDatabase = require("./config/connectDatabase");
 // const { appendData } = require("./scripts/append");
 
 const ChartRouter = require("./routes/chart");
+const AuthRouter = require("./routes/auth");
 
 const app = express();
 
@@ -34,6 +35,8 @@ app.get("/hello", (req, res, next) => {
   res.send("Hello there");
   next();
 });
+
+app.use("/auth", AuthRouter);
 
 app.use("/showChart", ChartRouter);
 
