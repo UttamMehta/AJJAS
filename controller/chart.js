@@ -9,9 +9,10 @@ async function register(req, res) {
       id2,
     });
 
-    if (userChart?.Chart?.lenght !== 0)
-      userChart = await Chart.create({ Id1, Id2, value });
-    else {
+    if (userChart?.Chart?.lenght !== 0) {
+      let Chart = [value];
+      userChart = await Chart.create({ Id1, Id2, Chart });
+    } else {
       userChart.Chart.push(value);
       await Chart.updateOne(
         { Id: userChart.Id },
@@ -20,7 +21,7 @@ async function register(req, res) {
     }
 
     return res.send({
-      message: "Registration successful",
+      data: userChart.Chart,
     });
   } catch (err) {
     return res.status(500).send({
