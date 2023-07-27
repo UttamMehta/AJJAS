@@ -2,9 +2,10 @@ const mongoose = require("mongoose");
 
 const ChartSchema = new mongoose.Schema(
   {
-    id1: String,
-    id2: String,
-    chart: Array,
+    id: ObjectId,
+    Id1: String,
+    Id2: String,
+    Chart: Array,
   },
   {
     timestamps: true,

@@ -38,7 +38,7 @@ app.get("/hello", (req, res, next) => {
 
 app.use("/auth", AuthRouter);
 
-app.use("/showChart", ChartRouter);
+app.use("/chart", ChartRouter);
 
 const port = process.argv[2] || 3035;
 
