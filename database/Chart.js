@@ -9,7 +9,7 @@ const ChartSchema = new mongoose.Schema(
 
   },
   {
-    timestamps:false,
+    timestamps:true,
   }
 );
 
