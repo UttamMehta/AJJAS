@@ -1,26 +1,22 @@
-// const express = require("express");
-// const app = express();
-// app.all("/", (req, res) => {
-//   console.log("Just got a request!");
-//   res.send("Yo!");
-// });
-// app.listen(process.env.PORT || 3000);
-
-require("dotenv").config();
+// require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-const path = require("path");
+// const path = require("path");
 const http = require("http");
+const {Server}=require("socket.io");
 
 const connectDatabase = require("./config/connectDatabase");
-// const { appendData } = require("./scripts/append");
 
-const ChartRouter = require("./routes/chart");
-const AuthRouter = require("./routes/auth");
+
+// const ChartRouter = require("./routes/chart");
+// const AuthRouter = require("./routes/auth");
 
 const app = express();
+const server=http.createServer(app);
+
+const webshocketserver=new Server(server);
 
 app.all("/", (req, res) => {
   console.log("Just got a request!");
@@ -36,20 +32,35 @@ app.get("/hello", (req, res, next) => {
   next();
 });
 
-app.use("/auth", AuthRouter);
+// app.use("/auth", AuthRouter);
 
-app.use("/chart", ChartRouter);
+// app.use("/chart", ChartRouter);
 
 const port = process.argv[2] || 3035;
 
 connectDatabase().then(() => {
-  app.listen(port, () => {
-    setInterval(() => {
-      appendData();
-    }, 10000);
-
+  server.listen(port, () => {
     console.log(
       `Server listening to http requests on http://localhost:${port}`
     );
   });
 });
+let count=0;
+
+webshocketserver.on("connection",(socket)=>{
+count++;
+  socket.emit("xyz",count);
+
+  socket.on("chat",(msg)=>{
+    console.log(msg)
+  })
+})
+
+
+
+
+
+
+
+
+
