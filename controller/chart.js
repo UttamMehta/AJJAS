@@ -1,6 +1,6 @@
 const { Chart } = require("../database/Chart");
 
-async function register(req, res) {
+async function ChartSaved(req, res) {
   try {
     const { value, Id1, Id2 } = req.body;
 
@@ -28,4 +28,8 @@ async function register(req, res) {
       error: "Something went wrong",
     });
   }
+}
+
+module.exports={
+  ChartSaved,
 }

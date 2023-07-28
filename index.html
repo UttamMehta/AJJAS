@@ -7,7 +7,9 @@
 </head>
 <body>
     <h1>Chat</h1>
-    <input type="email"/>
+    <input type="email" placeholder="Enter Email user" id="input"/>
+    <input type="email" placeholder="Enter Email recever" id="input2"/>
+    <input type="text" placeholder="Enter Message" id="value"/>
     <button onclick="sendmessage()">Send</button> 
     <p id="add"></p>
 </body>
@@ -18,11 +20,14 @@
     const socket=io("http://localhost:3035/",{transports:["websocket"]})
 socket.on("xyz",(msg)=>{
     console.log(msg);
-    document.getElementById("add").innerText=msg;
-})
+    document.getElementById("add").innerText=msg;})
 
 function sendmessage(){
-socket.emit("chat","abc");
+    let Id1=document.getElementById("input").value;
+    let Id2=document.getElementById("input2").value;
+    let Message=document.getElementById("value").value;
+    console.log(Id1+" line no 29");
+    socket.emit("chat",{Id1,Id2,Message});
 }
 
 </script>

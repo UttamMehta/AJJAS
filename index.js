@@ -6,11 +6,12 @@ const morgan = require("morgan");
 // const path = require("path");
 const http = require("http");
 const {Server}=require("socket.io");
+const {ChartSaved}=require("./controller/chart");
 
 const connectDatabase = require("./config/connectDatabase");
 
 
-// const ChartRouter = require("./routes/chart");
+const ChartRouter = require("./routes/chart");
 // const AuthRouter = require("./routes/auth");
 
 const app = express();
@@ -50,9 +51,23 @@ let count=0;
 webshocketserver.on("connection",(socket)=>{
 count++;
   socket.emit("xyz",count);
-
   socket.on("chat",(msg)=>{
-    console.log(msg)
+   const {Id1,Id2,Message}=msg;
+
+   if(!Id1||!Id2||!Message){
+    socket.emit(Id1,"Incorrect data");
+   }
+   else{
+    
+   }
+
+
+  })
+
+  socket.on("disconnect",()=>{
+    count--;
+ console.log("disconnected");
+ webshocketserver.emit("xyz",count);
   })
 })
 
