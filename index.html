@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Chat</h1>
-    <input type="email" placeholder="Enter Email user" id="input"/>
+    <h3 id="user"></h3>
     <input type="email" placeholder="Enter Email recever" id="input2"/>
     <input type="text" placeholder="Enter Message" id="value"/>
     <button onclick="sendmessage()">Send</button> 
@@ -33,7 +33,6 @@ async function sendmessage(){
     if(msg.err){
         alert("something went wrong");
     }
-
     else{
         console.log(msg);
     }

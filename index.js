@@ -87,13 +87,12 @@ count++;
     { 
       let err=false;
        socket.emit(Id1,userChart.Chat,err);
-      socket.emit(id2,userChart.Chat,err);
+      socket.emit(Id2,userChart.Chat,err);
     }
       else{
         let err=true
         socket.emit(Id1,err);
       }
-    
     } catch (err) {
      console.log("err on 81");
     }}
