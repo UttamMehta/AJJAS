@@ -4,8 +4,7 @@ const ChartSchema = new mongoose.Schema(
   {
     Id1: String,
     Id2: String,
-    Chart: Array,
-
+    Chat: Array,
   },
   {
     timestamps:true,

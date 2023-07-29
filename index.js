@@ -7,6 +7,7 @@ const morgan = require("morgan");
 const http = require("http");
 const {Server}=require("socket.io");
 const {ChartSaved}=require("./controller/chart");
+const { Chart } = require("./database/Chart");
 
 const connectDatabase = require("./config/connectDatabase");
 
@@ -35,7 +36,7 @@ app.get("/hello", (req, res, next) => {
 
 // app.use("/auth", AuthRouter);
 
-// app.use("/chart", ChartRouter);
+app.use("/chart", ChartRouter);
 
 const port = process.argv[2] || 3035;
 
@@ -51,27 +52,59 @@ let count=0;
 webshocketserver.on("connection",(socket)=>{
 count++;
   socket.emit("xyz",count);
-  socket.on("chat",(msg)=>{
+  socket.on("chat",async(msg)=>{
    const {Id1,Id2,Message}=msg;
 
+   let userChart ={};
    if(!Id1||!Id2||!Message){
     socket.emit(Id1,"Incorrect data");
    }
    else{
+    try {
+       userChart = await Chart.findOne({$or: [
+        { Id1, Id2},
+        {Id1: Id2, Id2:Id1 },
+      ],});
+      // console.log(userChart);
+      if (userChart===null) {
+        let Chat = [];
+        Chat.push(Message);
+        let obj={Id1,Id2,Chat};
+        console.log(obj);
+        userChart = await Chart.create(obj);
+      } else {
+        let newChart=userChart.Chat;
+        newChart.push(Message);
+        await Chart.updateOne(
+          { _Id: userChart._Id },
+          { $set: { Chat: [...newChart] } }
+        )
+
+        // console.log(userChart);
+      }
+
+      if(Object.keys(userChart).length!==0)
+    { 
+      let err=false;
+       socket.emit(Id1,userChart.Chat,err);
+      socket.emit(id2,userChart.Chat,err);
+    }
+      else{
+        let err=true
+        socket.emit(Id1,err);
+      }
     
-   }
-
-
-  })
-
-  socket.on("disconnect",()=>{
-    count--;
- console.log("disconnected");
- webshocketserver.emit("xyz",count);
-  })
+    } catch (err) {
+     console.log("err on 81");
+    }}
 })
 
-
+socket.on("disconnect",()=>{
+  count--;
+console.log("disconnected");
+webshocketserver.emit("xyz",count);
+})
+})
 
 
 

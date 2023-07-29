@@ -3,7 +3,7 @@ const { Chart } = require("../database/Chart");
 
 const ChartRouter = express.Router();
 
-ChartRouter.get("/", async (req, res) => {
+ChartRouter.get("/chat", async (req, res) => {
   try {
     return res.send({ data: "hello" });
   } catch (e) {
