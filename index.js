@@ -12,7 +12,7 @@ const { Chart } = require("./database/Chart");
 const connectDatabase = require("./config/connectDatabase");
 
 
-const ChartRouter = require("./routes/chart");
+// const ChartRouter = require("./routes/chart");
 // const AuthRouter = require("./routes/auth");
 
 const app = express();
@@ -36,7 +36,7 @@ app.get("/hello", (req, res, next) => {
 
 // app.use("/auth", AuthRouter);
 
-app.use("/chart", ChartRouter);
+// app.use("/chart", ChartRouter);
 
 const port = process.argv[2] || 3035;
 
@@ -52,10 +52,32 @@ let count=0;
 webshocketserver.on("connection",(socket)=>{
 count++;
   socket.emit("xyz",count);
+  let userChart ={};
+  socket.on("show",async(msg)=>{
+    const {Id1,Id2}=msg;
+     if(Id1&&Id2){
+      userChart = await Chart.findOne({$or: [
+        { Id1, Id2},
+        {Id1: Id2, Id2:Id1 },
+      ],});
+     }
+
+     if(userChart!==null)
+    { 
+      let err=false;
+      let chat=userChart.Chat;
+      socket.emit(Id1,{chat,err});
+      socket.emit(Id2,{chat,err});
+    }
+      else{
+        let err=true
+       socket.emit(Id1,err);
+      socket.emit(Id2,err);
+      }
+  })
+
   socket.on("chat",async(msg)=>{
    const {Id1,Id2,Message}=msg;
-
-   let userChart ={};
    if(!Id1||!Id2||!Message){
     socket.emit(Id1,"Incorrect data");
    }
@@ -86,14 +108,17 @@ count++;
       if(Object.keys(userChart).length!==0)
     { 
       let err=false;
-       socket.emit(Id1,userChart.Chat,err);
-      socket.emit(Id2,userChart.Chat,err);
+      let chat=userChart.Chat;
+      webshocketserver.emit(Id1,{chat,err,line:"111"});
+      webshocketserver.emit(Id2,{chat,err,line:"112"});
     }
       else{
         let err=true
         socket.emit(Id1,err);
       }
-    } catch (err) {
+    } catch (error) {
+      let err=true;
+      socket.emit(Id1,err);
      console.log("err on 81");
     }}
 })

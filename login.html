@@ -8,7 +8,8 @@
 <body>
 
     <h1>Log In</h1>
-    <input type="email" placeholder="Enter user email" id="input"/>
+    <input type="email" placeholder="Enter sender email" id="input1"/>
+    <input type="email" placeholder="Enter recever email" id="input2"/>
     <button onclick="nextpage()">Log In</button>
 
     
@@ -17,10 +18,13 @@
 <script>
 
 function nextpage(){
-    let value=document.getElementById("input").value;
-    if(value!==""){
-    localStorage.setItem("user",JSON.stringify(value));
+    let value=document.getElementById("input1").value;
+    let value1=document.getElementById("input2").value;
+    if(value&&value1){
+    localStorage.setItem("sender",JSON.stringify(value));
+    localStorage.setItem("receiver",JSON.stringify(value1));
     value.value="";
+    value1.value="";
     window.location.href="./index.html";
     }
 

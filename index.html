@@ -8,10 +8,9 @@
 <body>
     <h1>Chat</h1>
     <h3 id="user"></h3>
-    <input type="email" placeholder="Enter Email recever" id="input2"/>
     <input type="text" placeholder="Enter Message" id="value"/>
     <button onclick="sendmessage()">Send</button> 
-    <p id="add"></p>
+    <div id="add"></div>
 </body>
 </html>
 <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
@@ -22,24 +21,38 @@ socket.on("xyz",(msg)=>{
     console.log(msg);
     document.getElementById("add").innerText=msg;})
 
-let user=JSON.parse(localStorage.getItem("user"));
-console.log(user);
+let Id1=JSON.parse(localStorage.getItem("sender"));
+let Id2=JSON.parse(localStorage.getItem("receiver"));
+
+document.getElementById("user").innerText=Id1;
+socket.emit("show",{Id1,Id2});
+console.log(Id1);
+
+
+socket.on(Id1,(msg)=>{
+ const {err}=msg;
+ if(err){
+    
+ }
+ else{
+    show(msg.chat);
+ }
+
+   
+})
 
 async function sendmessage(){
-    let Id1=document.getElementById("input").value;
-    let Id2=document.getElementById("input2").value;
+    // let Id1=user;
+    // let Id2=document.getElementById("input2").value;
     let Message=document.getElementById("value").value;
     console.log(Id1+" line no 29");
    await socket.emit("chat",{Id1,Id2,Message});
+}
 
-   await socket.on(Id1,(msg)=>{
-    if(msg.err){
-        alert("something went wrong");
-    }
-    else{
-        console.log(msg);
-    }
-    })
+function show(){
+    document.getElementById("add").innerHTML="";
+
+
 }
 
 </script>
