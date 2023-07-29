@@ -60,23 +60,25 @@ count++;
         { Id1, Id2},
         {Id1: Id2, Id2:Id1 },
       ],});
-     }
 
-     if(userChart!==null)
-    { 
-      let err=false;
-      let chat=userChart.Chat;
-      socket.emit(Id1,{chat,err});
-      socket.emit(Id2,{chat,err});
-    }
-      else{
-        let err=true
-       socket.emit(Id1,err);
-      socket.emit(Id2,err);
+      if(userChart!==null)
+      { 
+        let err=false;
+        let chat=userChart.Chat;
+        webshocketserver.emit(Id1,{chat,err});
+        webshocketserver.emit(Id2,{chat,err});
       }
+        else{
+          let err=true;
+         webshocketserver.emit(Id1,{err});
+        webshocketserver.emit(Id2,{err});
+        }
+
+     }
   })
 
   socket.on("chat",async(msg)=>{
+    userChart={};
    const {Id1,Id2,Message}=msg;
    if(!Id1||!Id2||!Message){
     socket.emit(Id1,"Incorrect data");
@@ -87,33 +89,30 @@ count++;
         { Id1, Id2},
         {Id1: Id2, Id2:Id1 },
       ],});
-      // console.log(userChart);
-      if (userChart===null) {
+      if (userChart===null||Object.keys(userChart).length===0) {
         let Chat = [];
         Chat.push(Message);
         let obj={Id1,Id2,Chat};
-        console.log(obj);
         userChart = await Chart.create(obj);
       } else {
-        let newChart=userChart.Chat;
-        newChart.push(Message);
-        await Chart.updateOne(
-          { _Id: userChart._Id },
-          { $set: { Chat: [...newChart] } }
-        )
+       
+        userChart.Chat.push(Message);
+        let useabc=userChart.Chat;
+        let filter={_id:userChart._id};
+        let update={$set:{Chat:[...useabc]}};
+        await Chart.updateOne(filter,update);
 
-        // console.log(userChart);
       }
 
       if(Object.keys(userChart).length!==0)
     { 
       let err=false;
       let chat=userChart.Chat;
-      webshocketserver.emit(Id1,{chat,err,line:"111"});
+    webshocketserver.emit(Id1,{chat,err,line:"111"});
       webshocketserver.emit(Id2,{chat,err,line:"112"});
     }
       else{
-        let err=true
+        let err=true;
         socket.emit(Id1,err);
       }
     } catch (error) {

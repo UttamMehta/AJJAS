@@ -8,6 +8,7 @@
 <body>
     <h1>Chat</h1>
     <h3 id="user"></h3>
+    <p id="userlogin"></p>
     <input type="text" placeholder="Enter Message" id="value"/>
     <button onclick="sendmessage()">Send</button> 
     <div id="add"></div>
@@ -19,7 +20,8 @@
     const socket=io("http://localhost:3035/",{transports:["websocket","polling"]})
 socket.on("xyz",(msg)=>{
     console.log(msg);
-    document.getElementById("add").innerText=msg;})
+    msg="User LogedIn"+" "+msg;
+    document.getElementById("userlogin").innerText=msg;})
 
 let Id1=JSON.parse(localStorage.getItem("sender"));
 let Id2=JSON.parse(localStorage.getItem("receiver"));
@@ -32,9 +34,10 @@ console.log(Id1);
 socket.on(Id1,(msg)=>{
  const {err}=msg;
  if(err){
-    
+    console.log(msg);
  }
  else{
+    console.log(msg)
     show(msg.chat);
  }
 
@@ -49,10 +52,14 @@ async function sendmessage(){
    await socket.emit("chat",{Id1,Id2,Message});
 }
 
-function show(){
+function show(arr){
     document.getElementById("add").innerHTML="";
 
-
+    arr.map((el,i)=>{
+        let p=document.createElement("p");
+        p.innerText=el;
+        document.getElementById("add").append(p);
+    })
 }
 
 </script>
