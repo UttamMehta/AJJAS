@@ -22,6 +22,9 @@ socket.on("xyz",(msg)=>{
     console.log(msg);
     document.getElementById("add").innerText=msg;})
 
+let user=JSON.parse(localStorage.getItem("user"));
+console.log(user);
+
 async function sendmessage(){
     let Id1=document.getElementById("input").value;
     let Id2=document.getElementById("input2").value;

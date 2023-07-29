@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1>Log In</h1>
+    <input type="email" placeholder="Enter user email" id="input"/>
+    <button onclick="nextpage()">Log In</button>
+
+    
+</body>
+</html>
+<script>
+
+function nextpage(){
+    let value=document.getElementById("input").value;
+    if(value!==""){
+    localStorage.setItem("user",JSON.stringify(value));
+    value.value="";
+    window.location.href="./index.html";
+    }
+
+    else
+    alert("Enter User Details");
+}
+
+</script>
