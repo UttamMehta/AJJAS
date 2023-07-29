@@ -28,10 +28,10 @@ let Id2=JSON.parse(localStorage.getItem("receiver"));
 
 document.getElementById("user").innerText=Id1;
 socket.emit("show",{Id1,Id2});
-console.log(Id1);
+console.log(Id1+Id2);
 
 
-socket.on(Id1,(msg)=>{
+socket.on(Id1+Id2,(msg)=>{
  const {err}=msg;
  if(err){
     console.log(msg);

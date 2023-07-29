@@ -65,13 +65,13 @@ count++;
       { 
         let err=false;
         let chat=userChart.Chat;
-        webshocketserver.emit(Id1,{chat,err});
-        webshocketserver.emit(Id2,{chat,err});
+        webshocketserver.emit(Id1+Id2,{chat,err});
+        webshocketserver.emit(Id2+Id2,{chat,err});
       }
         else{
           let err=true;
-         webshocketserver.emit(Id1,{err});
-        webshocketserver.emit(Id2,{err});
+         webshocketserver.emit(Id1+Id2,{err});
+        webshocketserver.emit(Id2+Id1,{err});
         }
 
      }
@@ -108,16 +108,16 @@ count++;
     { 
       let err=false;
       let chat=userChart.Chat;
-    webshocketserver.emit(Id1,{chat,err,line:"111"});
-      webshocketserver.emit(Id2,{chat,err,line:"112"});
+   socket.emit(Id1+Id2,{chat,err,line:"111"});
+      webshocketserver.emit(Id2+Id1,{chat,err,line:"112"});
     }
       else{
         let err=true;
-        socket.emit(Id1,err);
+        socket.emit(Id1+Id2,err);
       }
     } catch (error) {
       let err=true;
-      socket.emit(Id1,err);
+      socket.emit(Id1+Id2,err);
      console.log("err on 81");
     }}
 })
