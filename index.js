@@ -6,7 +6,7 @@ const morgan = require("morgan");
 // const path = require("path");
 const http = require("http");
 const {Server}=require("socket.io");
-const {ChartSaved}=require("./controller/chart");
+// const {ChartSaved}=require("./controller/chart");
 const { Chart } = require("./database/Chart");
 
 const connectDatabase = require("./config/connectDatabase");
@@ -16,10 +16,6 @@ const connectDatabase = require("./config/connectDatabase");
 // const AuthRouter = require("./routes/auth");
 
 const app = express();
-const server=http.createServer(app);
-
-const webshocketserver=new Server(server);
-
 app.all("/", (req, res) => {
   console.log("Just got a request!");
   res.send("Hello");
@@ -40,8 +36,12 @@ app.get("/hello", (req, res, next) => {
 
 const port = process.argv[2] || 3035;
 
+const server=http.createServer(app);
+
+const webshocketserver=new Server(server);
+
 connectDatabase().then(() => {
-  server.listen(port, () => {
+ server.listen(port, () => {
     console.log(
       `Server listening to http requests on http://localhost:${port}`
     );
