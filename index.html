@@ -51,7 +51,7 @@ async function sendmessage(){
     let Message=document.getElementById("value").value;
     console.log(Id1+" line no 29");
    await socket.emit("chat",{Id1,Id2,Message});
-   document.getElementById("value").value="";
+//    document.getElementById("value").value="";
 }
 
 function show(arr){
