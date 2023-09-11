@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+</head>
+<body>
+    <h1>Chat</h1>
+    <h3 id="user"></h3>
+    <p id="userlogin"></p>
+    <input type="text" placeholder="Enter Message" id="value"/>
+    <button onclick="sendmessage()">Send</button> 
+    <div id="add"></div>
+</body>
+</html>
+<script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+
+<script>
+    const socket=io("http://localhost:3035/",{transports:["websocket","polling"]})
+socket.on("xyz",(msg)=>{
+    console.log(msg);
+    msg="User LogedIn"+" "+msg;
+    document.getElementById("userlogin").innerText=msg;})
+
+let Id1=JSON.parse(localStorage.getItem("sender"));
+let Id2=JSON.parse(localStorage.getItem("receiver"));
+
+document.getElementById("user").innerText=Id1;
+socket.emit("show",{Id1,Id2});
+console.log(Id1+Id2);
+
+
+socket.on(Id1+Id2,(msg)=>{
+ const {err}=msg;
+ console.log(mgs);
+ if(err){
+    console.log(msg);
+ }
+ else{
+    console.log(msg)
+    show(msg.chat);
+ }
+
+   
+})
+
+async function sendmessage(){
+    // let Id1=user;
+    // let Id2=document.getElementById("input2").value;
+    let Message=document.getElementById("value").value;
+    console.log(Id1+" line no 29");
+   await socket.emit("chat",{Id1,Id2,Message});
+   document.getElementById("value").value="";
+}
+
+function show(arr){
+    document.getElementById("add").innerHTML="";
+
+    arr.map((el,i)=>{
+        let p=document.createElement("p");
+        p.innerText=el;
+        document.getElementById("add").append(p);
+    })
+}
+
+</script>
