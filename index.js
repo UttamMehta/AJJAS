@@ -32,13 +32,15 @@ app.use(cors());
 app.use(morgan("tiny"));
 
 app.get("/hello", (req, res, next) => {
-  res.send("Hello there");
+  res.send("Hello there app");
   next();
 });
 
 app.use("/auth", AuthRouter);
 
 app.use("/chart", ChartRouter);
+
+
 
 const port = process.argv[2] || 3035;
 
